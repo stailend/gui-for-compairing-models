@@ -8,8 +8,7 @@ from scipy.special import expit as sigmoid
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, average_precision_score, confusion_matrix
 import torch
 
-import_indexes = [ 'ct_srv_src', 'dmean',
- 'ct_srv_dst', 'smean', 'sbytes', 'ct_state_ttl', 'sttl']
+#import_indexes = [ 'ct_srv_src', 'dmean', 'ct_srv_dst', 'smean', 'sbytes', 'ct_state_ttl', 'sttl']
 
 class pwlModel:
     def __init__(self, input_dim, learning_rate=0.01, epochs=500, pca_components=2):
@@ -94,9 +93,9 @@ class pwlModel:
             self.scaler = data["scaler"]
             self.pca = data["pca"]
             self.optimizer = optim.Adam([self.weights1, self.weights2], lr=self.learning_rate)
-            print("Модель PWL загружена.")
+            print("PWL model loaded.")
         else:
-            print("Файл модели не найден!")
+            print("Model file not found!")
 
     def plot_decision(self, X_test, y_test, ):
         import matplotlib.pyplot as plt
