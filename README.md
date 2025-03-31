@@ -17,14 +17,15 @@ This project provides a user-friendly graphical interface for configuring, train
 ```bash
 git clone https://github.com/stailend/gui-for-compairing-models.git
 cd gui-for-compairing-models
-
-	2.	Install dependencies:
-
+```
+2.	Install dependencies:
+```bash
 pip install -r requirements.txt
-
-	3.	Run the application:
-
+```
+3.	Run the application:
+```bash
 python gui.py
+```
 
 Requirements
 	•	Python 3.8+
@@ -36,7 +37,7 @@ Usage
 	2.	Select the dataset (currently only UNSW-NB15 is available).
 	3.	Choose one or more models and adjust their parameters.
 	4.	Select evaluation metrics and graphs to visualize.
-	5.	Click “Запустить обучение” (Run Training) to start training and see the results.
+	5.	Click Run Training to start training and see the results.
 
 License
 
