@@ -7,6 +7,8 @@ from sklearn.preprocessing import StandardScaler
 from scipy.special import expit as sigmoid
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, average_precision_score, confusion_matrix
 import torch
+import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
 
 #import_indexes = [ 'ct_srv_src', 'dmean', 'ct_srv_dst', 'smean', 'sbytes', 'ct_state_ttl', 'sttl']
 
@@ -97,16 +99,13 @@ class pwlModel:
         else:
             print("Model file not found!")
 
-    def plot_decision(self, X_test, y_test, ):
-        import matplotlib.pyplot as plt
-        from matplotlib.colors import ListedColormap
-        import numpy as np
+    def plot_decision(self, X_test, y_test):
+        
 
-        X_test_scaled = self.scaler.transform(X_test)
-        X_test_scaled = np.hstack((np.ones((X_test_scaled.shape[0], 1)), X_test_scaled))
+        #X_test = np.hstack((np.ones((X_test.shape[0], 1)), X_test))
 
-        x_min, x_max = X_test_scaled[:, 1].min() - 3.1, X_test_scaled[:, 1].max() + 3.1
-        y_min, y_max = X_test_scaled[:, 2].min() - 3.1, X_test_scaled[:, 2].max() + 3.1
+        x_min, x_max = X_test[:, 0].min() - 0.1, X_test[:, 0].max() + 0.1
+        y_min, y_max = X_test[:, 1].min() - 0.1, X_test[:, 1].max() + 0.1
         xx, yy = np.meshgrid(np.linspace(x_min, x_max, 300),
                              np.linspace(y_min, y_max, 300))
 
@@ -118,14 +117,17 @@ class pwlModel:
 
 
         plt.figure(figsize=(8, 6))
-        plt.contourf(xx, yy, Z, alpha=0.3, cmap='RdYlBu')
-        plt.scatter(X_test_scaled[y_test == 0][:, 1], X_test_scaled[y_test == 0][:, 2], color='red', label='Класс 0')
-        plt.scatter(X_test_scaled[y_test == 1][:, 1], X_test_scaled[y_test == 1][:, 2], color='green', label='Класс 1')
-        plt.legend()
         plt.xlabel("Признак 1")
         plt.ylabel("Признак 2")
         plt.title("Граница решения модели PWL")
-        plt.xlim(-5, 5)
-        plt.ylim(-5, 5)
-        plt.grid(True)
+        from matplotlib.colors import ListedColormap
+        custom_cmap = ListedColormap(['blue', 'red'])  
+        plt.contourf(xx, yy, Z, alpha=0.3, cmap=custom_cmap)        
+        plt.scatter(X_test[y_test == 0][:, 0], X_test[y_test == 0][:, 1], c='blue', s=20, alpha=0.8, edgecolors='k', linewidths=0.2, label='Class 0 (Normal)')        
+        plt.scatter(X_test[y_test == 1][:, 0], X_test[y_test == 1][:, 1], c='red', s=20, alpha=0.8, edgecolors='k', linewidths=0.2, label='Class 1 (Anomaly, Rotated)')
+        plt.legend()
+        
+        plt.xlim(x_min, x_max)
+        plt.ylim(y_min, y_max)
+        plt.grid()
         plt.show()

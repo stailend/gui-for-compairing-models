@@ -19,12 +19,14 @@ class MLInterface(QWidget):
         dataset_label = QLabel("Choose dataset:")
         self.dataset_combo = QComboBox()
         self.dataset_combo.addItems(["UNSW-NB15"])
+        #self.dataset_combo.addItems(["UNSW-NB15_transformed"])
+
 
         self.models_group = QGroupBox("Pick models")
         model_layout = QGridLayout()
         self.models = {}
 
-        model_names = ["CatBoost", "NN",  "RandomForest", "KNN", "PWL", "CART"] #"SVM",
+        model_names = ["CatBoost", "NN", "RandomForest", "KNN", "PWL", "CART", "SVM"]
         for index, model in enumerate(model_names):
             group_box = QGroupBox(model)
             group_layout = QFormLayout()
@@ -35,23 +37,23 @@ class MLInterface(QWidget):
             if model == "CatBoost":
                 params["Глубина деревьев"] = QLineEdit("6")
                 params["Количество итераций"] = QLineEdit("100")
-                params["Скорость обучения"] = QLineEdit("0.05")
+                params["Скорость обучения"] = QLineEdit("0.02")
             elif model == "NN":
-                params["Размер скрытого слоя"] = QLineEdit("128")
+                params["Размер скрытого слоя"] = QLineEdit("64")
                 params["Скорость обучения"] = QLineEdit("0.01")
                 params["Эпохи"] = QLineEdit("100")
             elif model == "SVM":
                 params["Коэффициент C"] = QLineEdit("1.0")
                 params["Ядро"] = QLineEdit("rbf")
             elif model == "RandomForest":
-                params["Количество деревьев"] = QLineEdit("100")
+                params["Количество деревьев"] = QLineEdit("50")
                 params["Максимальная глубина"] = QLineEdit("None")
             elif model == "KNN":
-                params["Количество соседей"] = QLineEdit("5")
+                params["Количество соседей"] = QLineEdit("4")
                 params["Метрика"] = QLineEdit("minkowski")
             elif model == "PWL":
-                params["Скорость обучения"] = QLineEdit("0.01")
-                params["Эпохи"] = QLineEdit("100")
+                params["Скорость обучения"] = QLineEdit("0.05")
+                params["Эпохи"] = QLineEdit("500")
             elif model == "CART":
                 params["Максимальная глубина"] = QLineEdit("None")
                 params["Минимальное количество для разбиения"] = QLineEdit("2")

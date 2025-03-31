@@ -20,8 +20,6 @@ class MLController:
         results_data = {}
         model_data = {}
         confusion_matrices = {}
-        indexes = np.random.randint(0, self.X_test.shape[0], 1000)
-
 
         for model_name in selected_models:
             if model_name == "CatBoost":
@@ -66,9 +64,8 @@ class MLController:
             model.train(self.X_train, self.y_train)
             y_proba_train, y_proba_test, conf_matrix = model.evaluate(self.X_train, self.X_test, self.y_train, self.y_test)
             if "Classes" in selected_graphs:
-                self.example_X_test = self.X_test[indexes]
-                self.example_y_test = self.y_test[indexes]
-                model.plot_decision(self.example_X_test, self.example_y_test)
+
+                model.plot_decision(self.X_test, self.y_test)
             
             #model.save_model()
             #if model_name == "CatBoost":
@@ -79,7 +76,5 @@ class MLController:
             confusion_matrices[model_name] = conf_matrix
 
         results.plot_selected_curves(model_data, selected_graphs, confusion_matrices)
-
-        
 
         return results_data

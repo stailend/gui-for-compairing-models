@@ -2,6 +2,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, average_precision_score, confusion_matrix
 import matplotlib.pyplot as plt
+import numpy as np
 import joblib
 import os
 
@@ -34,7 +35,7 @@ class cartModel:
             "PR-AUC": average_precision_score(y_test, y_proba_test)
         }
 
-        self.plot_decision(X_test, y_test)
+        #self.plot_decision(X_test, y_test)
 
 
         return y_proba_train, y_proba_test, confusion_matrix(y_test, y_pred_test)
@@ -53,32 +54,29 @@ class cartModel:
             print("Файл модели не найден!")
 
     def plot_decision(self, X_test, y_test):
-        from matplotlib.colors import ListedColormap
+        import matplotlib.pyplot as plt
         import numpy as np
 
-        X_test_scaled = self.scaler.transform(X_test)
-
-        x_min, x_max = X_test_scaled[:, 0].min() - 0.1, X_test_scaled[:, 0].max() + 0.1
-        y_min, y_max = X_test_scaled[:, 1].min() - 0.1, X_test_scaled[:, 1].max() + 0.1
+        x_min, x_max = X_test[:, 0].min() - 0.1, X_test[:, 0].max() + 0.1
+        y_min, y_max = X_test[:, 1].min() - 0.1, X_test[:, 1].max() + 0.1
         xx, yy = np.meshgrid(np.linspace(x_min, x_max, 300),
                              np.linspace(y_min, y_max, 300))
         grid = np.c_[xx.ravel(), yy.ravel()]
         Z = self.model.predict(grid)
         Z = Z.reshape(xx.shape)
-
+        
+        plt.figure(figsize=(8, 6))
         plt.xlabel("Признак 1")
         plt.ylabel("Признак 2")
         plt.title("Граница решения модели CART")
-        
-        plt.scatter(X_test_scaled[y_test == 0][:, 0], X_test_scaled[y_test == 0][:, 1], color='red', label='Класс 0')
-        plt.scatter(X_test_scaled[y_test == 1][:, 0], X_test_scaled[y_test == 1][:, 1], color='green', label='Класс 1')
-        plt.contourf(xx, yy, Z, alpha=0.3, cmap='RdYlBu')
+        from matplotlib.colors import ListedColormap
+        custom_cmap = ListedColormap(['blue', 'red'])  
+        plt.contourf(xx, yy, Z, alpha=0.3, cmap=custom_cmap)
+
+        plt.scatter(X_test[y_test == 0][:, 0], X_test[y_test == 0][:, 1], c='blue', s=20, alpha=0.8, edgecolors='k', linewidths=0.2, label='Class 0 (Normal)')
+        plt.scatter(X_test[y_test == 1][:, 0], X_test[y_test == 1][:, 1], c='red', s=20, alpha=0.8, edgecolors='k', linewidths=0.2, label='Class 1 (Anomaly, Rotated)')
 
         plt.xlim(x_min, x_max)
         plt.ylim(y_min, y_max)
         plt.grid()
-        #plt.legend()
-
-        #plt.figure(figsize=(8, 6))
-        
         plt.show()

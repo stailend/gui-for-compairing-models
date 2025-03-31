@@ -41,7 +41,6 @@ class CatBoostModel:
         return y_proba_train, y_proba_test, self.conf_matrix
 
     def plot_feature_importance(self, feature_names, save_path="results/catboost_feature_importance.png"):
-        """Строит и сохраняет график важности признаков."""
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
         importance = self.model.get_feature_importance()
         sorted_idx = np.argsort(importance)
@@ -57,3 +56,33 @@ class CatBoostModel:
     def save_model(self, path="models/catboost_model.pkl"):
         os.makedirs(os.path.dirname(path), exist_ok=True)
         joblib.dump(self.model, path)
+
+    def plot_decision(self, X_test, y_test ):
+        import matplotlib.pyplot as plt
+        from matplotlib.colors import ListedColormap
+        import numpy as np
+
+       
+
+        x_min, x_max = X_test[:, 0].min() - 0.1, X_test[:, 0].max() + 0.1
+        y_min, y_max = X_test[:, 1].min() - 0.1, X_test[:, 1].max() + 0.1
+        xx, yy = np.meshgrid(np.linspace(x_min, x_max, 300),
+                             np.linspace(y_min, y_max, 300))
+        grid = np.c_[xx.ravel(), yy.ravel()]
+        Z = self.model.predict(grid)
+        Z = Z.reshape(xx.shape)
+
+        plt.figure(figsize=(8, 6))
+        from matplotlib.colors import ListedColormap
+        custom_cmap = ListedColormap(['blue', 'red'])  
+        plt.contourf(xx, yy, Z, alpha=0.3, cmap=custom_cmap)        
+        plt.scatter(X_test[y_test == 0][:, 0], X_test[y_test == 0][:, 1], c='blue', s=20, alpha=0.8, edgecolors='k', linewidths=0.2, label='Class 0 (Normal)')
+        plt.scatter(X_test[y_test == 1][:, 0], X_test[y_test == 1][:, 1], c='red', s=20, alpha=0.8, edgecolors='k', linewidths=0.2, label='Class 1 (Anomaly, Rotated)')
+        plt.xlabel("Признак 1")
+        plt.ylabel("Признак 2")
+        plt.title("Граница решения модели CatBoost")
+        plt.legend()
+        plt.grid()
+        plt.xlim(x_min, x_max)
+        plt.ylim(y_min, y_max)
+        plt.show()
