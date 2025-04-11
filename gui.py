@@ -11,6 +11,7 @@ class MLInterface(QWidget):
         self.setWindowTitle("ML models analysis")
         self.setGeometry(100, 100, 900, 750)
         self.controller = heart.MLController()
+        
         self.initUI()
 
     def initUI(self):
@@ -19,7 +20,7 @@ class MLInterface(QWidget):
         dataset_label = QLabel("Choose dataset:")
         self.dataset_combo = QComboBox()
         self.dataset_combo.addItems(["UNSW-NB15"])
-        #self.dataset_combo.addItems(["UNSW-NB15_transformed"])
+        self.dataset_combo.addItems(["UNSW-NB15_transformed"])
 
 
         self.models_group = QGroupBox("Pick models")
@@ -90,6 +91,8 @@ class MLInterface(QWidget):
         self.run_button = QPushButton("Run")
         self.run_button.clicked.connect(self.run_training)
 
+
+        
         self.results_box = QTextEdit()
         self.results_box.setReadOnly(True)
 
@@ -113,7 +116,9 @@ class MLInterface(QWidget):
         }
         selected_metrics = [m for m in self.metrics if self.metrics[m].isChecked()]
         selected_graphs = [g for g in self.graphs if self.graphs[g].isChecked()]
-
+        
+        dataset = self.dataset_combo.itemText(self.dataset_combo.currentIndex())
+        self.controller.data(dataset)
         metrics = self.controller.train_and_evaluate(selected_models, model_params, selected_metrics, selected_graphs)
 
         result_text = "=== Final metrics ===\n"

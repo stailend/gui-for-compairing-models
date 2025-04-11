@@ -1,6 +1,4 @@
-import dataset
 import results
-
 from base_models import model_catboost
 from base_models import nn
 from base_models import svm
@@ -12,9 +10,24 @@ import numpy as np
 
 class MLController:
     def __init__(self):
-        self.dataset_loader = dataset.DatasetLoader()
-        self.dataset_loader.load_and_preprocess()
-        self.X_train, self.X_test, self.y_train, self.y_test, self.features, self.target = self.dataset_loader.get_data()
+        self.X_train, self.X_test, self.y_train, self.y_test, self.features, self.target = 0,0,0,0,0,0
+    def data(self, dataset = 'UNSW-NB15'):
+        if dataset == 'UNSW-NB15':
+            print(dataset)
+            import datasets.UNSW_NB15 as dataset
+            self.dataset_loader = dataset.DatasetLoader()
+            self.dataset_loader.load_and_preprocess()
+            self.X_train, self.X_test, self.y_train, self.y_test, self.features, self.target = self.dataset_loader.get_data()
+
+        if dataset == 'UNSW-NB15_transformed':  
+            print(dataset)
+            import datasets.UNSW_NB15_transformed as dataset
+            self.dataset_loader = dataset.DatasetLoader()
+            self.dataset_loader.load_and_preprocess()
+            self.X_train, self.X_test, self.y_train, self.y_test, self.features, self.target = self.dataset_loader.get_data()
+
+        else:
+            print('unknown dataset')
 
     def train_and_evaluate(self, selected_models, model_params, selected_metrics, selected_graphs):
         results_data = {}
@@ -61,6 +74,7 @@ class MLController:
                     max_depth=int(model_params[model_name]["Максимальная глубина"]) if model_params[model_name]["Максимальная глубина"] != "None" else None,
                     min_samples_split=int(model_params[model_name]["Минимальное количество для разбиения"])
                 )
+
             model.train(self.X_train, self.y_train)
             y_proba_train, y_proba_test, conf_matrix = model.evaluate(self.X_train, self.X_test, self.y_train, self.y_test)
             if "Classes" in selected_graphs:
