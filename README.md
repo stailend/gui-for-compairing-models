@@ -2,6 +2,8 @@
 
 This project provides a user-friendly graphical interface for configuring, training, and comparing various machine learning models on the UNSW-NB15 dataset. The application is built using **PyQt6** and is designed to assist users in evaluating classification models in the context of information security tasks.
 
+![GUI](example.png)
+
 ## Features
 
 - Interactive selection of models (e.g., CatBoost, Neural Network, SVM, Random Forest, KNN, PWL, CART)
