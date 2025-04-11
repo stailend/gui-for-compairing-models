@@ -19,9 +19,9 @@ class MLController:
             self.dataset_loader.load_and_preprocess()
             self.X_train, self.X_test, self.y_train, self.y_test, self.features, self.target = self.dataset_loader.get_data()
 
-        if dataset == 'UNSW-NB15_transformed':  
+        if dataset == 'Random':  
             print(dataset)
-            import datasets.UNSW_NB15_transformed as dataset
+            import datasets.random as dataset
             self.dataset_loader = dataset.DatasetLoader()
             self.dataset_loader.load_and_preprocess()
             self.X_train, self.X_test, self.y_train, self.y_test, self.features, self.target = self.dataset_loader.get_data()
@@ -37,42 +37,42 @@ class MLController:
         for model_name in selected_models:
             if model_name == "CatBoost":
                 model = model_catboost.CatBoostModel(
-                    depth=int(model_params[model_name]["Глубина деревьев"]),
-                    iterations=int(model_params[model_name]["Количество итераций"]),
-                    learning_rate=float(model_params[model_name]["Скорость обучения"])
+                    depth=int(model_params[model_name]["Tree Depth"]),
+                    iterations=int(model_params[model_name]["Number of Iterations"]),
+                    learning_rate=float(model_params[model_name]["Learning Rate"])
                 )
             elif model_name == "NN":
                 model = nn.NNModel(
                     input_size=self.X_train.shape[1],
-                    hidden_size=int(model_params[model_name]["Размер скрытого слоя"]),
-                    learning_rate=float(model_params[model_name]["Скорость обучения"]),
-                    epochs=int(model_params[model_name]["Эпохи"])
+                    hidden_size=int(model_params[model_name]["Hidden Layer Size"]),
+                    learning_rate=float(model_params[model_name]["Learning Rate"]),
+                    epochs=int(model_params[model_name]["Epochs"])
                 )
             elif model_name == "SVM":
                 model = svm.SVMModel(
-                    C=float(model_params[model_name]["Коэффициент C"]),
-                    kernel=model_params[model_name]["Ядро"]
+                    C=float(model_params[model_name]["C Coefficient"]),
+                    kernel=model_params[model_name]["Kernel"]
                 )
             elif model_name == "RandomForest":
                 model = random_forest.RandomForestModel(
-                    n_estimators=int(model_params[model_name]["Количество деревьев"]),
-                    max_depth=int(model_params[model_name]["Максимальная глубина"]) if model_params[model_name]["Максимальная глубина"] != "None" else None
+                    n_estimators=int(model_params[model_name]["Number of Trees"]),
+                    max_depth=int(model_params[model_name]["Maximum Depth"]) if model_params[model_name]["Maximum Depth"] != "None" else None
                 )
             elif model_name == "KNN":
                 model = knn.KNNModel(
-                    n_neighbors=int(model_params[model_name]["Количество соседей"]),
-                    metric=model_params[model_name]["Метрика"]
+                    n_neighbors=int(model_params[model_name]["Number of Neighbors"]),
+                    metric=model_params[model_name]["Metric"]
                 )
             elif model_name == "PWL":
                 model = pwl.pwlModel(
                     input_dim=self.X_train.shape[1],
-                    learning_rate=float(model_params[model_name]["Скорость обучения"]),
-                    epochs=int(model_params[model_name]["Эпохи"])
+                    learning_rate=float(model_params[model_name]["Learning Rate"]),
+                    epochs=int(model_params[model_name]["Epochs"])
                 )
             elif model_name == "CART":
                 model = cart.cartModel(
-                    max_depth=int(model_params[model_name]["Максимальная глубина"]) if model_params[model_name]["Максимальная глубина"] != "None" else None,
-                    min_samples_split=int(model_params[model_name]["Минимальное количество для разбиения"])
+                    max_depth=int(model_params[model_name]["Maximum Depth"]) if model_params[model_name]["Maximum Depth"] != "None" else None,
+                    min_samples_split=int(model_params[model_name]["Minimum Samples to Split"])
                 )
 
             model.train(self.X_train, self.y_train)
