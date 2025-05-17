@@ -1,5 +1,5 @@
 from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, average_precision_score, confusion_matrix
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, average_precision_score, log_loss, confusion_matrix
 import joblib
 import os
 import matplotlib.pyplot as plt
@@ -26,7 +26,8 @@ class SVMModel:
             "Recall": recall_score(y_test, y_pred_test),
             "F1-score": f1_score(y_test, y_pred_test),
             "ROC-AUC": roc_auc_score(y_test, y_proba_test),
-            "PR-AUC": average_precision_score(y_test, y_proba_test)
+            "PR-AUC": average_precision_score(y_test, y_proba_test),
+            "Log-Loss": log_loss(y_test, y_proba_test)
         }
 
         return y_proba_train, y_proba_test, confusion_matrix(y_test, y_pred_test)

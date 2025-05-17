@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, average_precision_score, confusion_matrix
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, average_precision_score, log_loss, confusion_matrix
 from sklearn.preprocessing import StandardScaler
 import joblib
 import os
@@ -61,7 +61,8 @@ class NNModel:
                 "Recall": recall_score(y_test, y_pred_test),
                 "F1-score": f1_score(y_test, y_pred_test),
                 "ROC-AUC": roc_auc_score(y_test, y_proba_test),
-                "PR-AUC": average_precision_score(y_test, y_proba_test)
+                "PR-AUC": average_precision_score(y_test, y_proba_test),
+                "Log-Loss": log_loss(y_test, y_proba_test)
             }
 
             return y_proba_train, y_proba_test, confusion_matrix(y_test, y_pred_test)

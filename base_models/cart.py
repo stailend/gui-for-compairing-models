@@ -1,6 +1,6 @@
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, average_precision_score, confusion_matrix
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, average_precision_score, log_loss, confusion_matrix
 import matplotlib.pyplot as plt
 import numpy as np
 import joblib
@@ -32,7 +32,9 @@ class cartModel:
             "Recall": recall_score(y_test, y_pred_test),
             "F1-score": f1_score(y_test, y_pred_test),
             "ROC-AUC": roc_auc_score(y_test, y_proba_test),
-            "PR-AUC": average_precision_score(y_test, y_proba_test)
+            "PR-AUC": average_precision_score(y_test, y_proba_test),
+            "Log-Loss": log_loss(y_test, y_proba_test)
+
         }
 
         #self.plot_decision(X_test, y_test)

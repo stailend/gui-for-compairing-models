@@ -71,7 +71,7 @@ class MLInterface(QWidget):
 
         self.metrics_group = QGroupBox("Choose metrics")
         metrics_layout = QHBoxLayout()
-        self.metrics = {m: QCheckBox(m) for m in ["Accuracy", "Precision", "Recall", "F1-score", "ROC-AUC", "PR-AUC"]}
+        self.metrics = {m: QCheckBox(m) for m in ["Accuracy", "Precision", "Recall", "F1-score", "ROC-AUC", "PR-AUC", "Log-Loss"]}
         for checkbox in self.metrics.values():
             checkbox.setChecked(False)
             metrics_layout.addWidget(checkbox)

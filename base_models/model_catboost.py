@@ -3,10 +3,7 @@ import joblib
 import os
 import matplotlib.pyplot as plt
 from catboost import CatBoostClassifier
-from sklearn.metrics import (
-    accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, 
-    average_precision_score, confusion_matrix
-)
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, average_precision_score, log_loss, confusion_matrix
 
 class CatBoostModel:
     def __init__(self, depth=6, iterations=1000, learning_rate=0.1):
@@ -33,7 +30,8 @@ class CatBoostModel:
             "Recall": recall_score(y_test, y_pred_test),
             "F1-score": f1_score(y_test, y_pred_test),
             "ROC-AUC": roc_auc_score(y_test, y_proba_test),
-            "PR-AUC": average_precision_score(y_test, y_proba_test)
+            "PR-AUC": average_precision_score(y_test, y_proba_test),
+            "Log-Loss": log_loss(y_test, y_proba_test)
         }
 
         self.conf_matrix = confusion_matrix(y_test, y_pred_test)
